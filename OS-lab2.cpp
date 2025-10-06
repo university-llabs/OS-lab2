@@ -1,20 +1,42 @@
-// OS-lab2.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
-
 #include <iostream>
+#include <Windows.h>
+#include <vector>
+#include <cstring>
 
-int main()
+using namespace std;
+
+int main(int argc, char* argv[])
 {
-    std::cout << "Hello World!\n";
+	if (argc > 1 && strcmp(argv[1], "child") == 0) {
+
+	}
+	else {
+		int n;
+		cout << "Enter size: ";
+		cin >> n;
+		vector<int> v(n);
+		cout << "Enter " << n << " elements";
+		for (int& c : v) {
+			cin >> c;
+		}
+		// структура для настройки атрибутов безопасности для наследования дескрипторов
+		SECURITY_ATTRIBUTES sa;
+		sa.nLength = sizeof(SECURITY_ATTRIBUTES);	// размер структуры
+		sa.bInheritHandle = TRUE;			// разрешить наследовать дескрипторы
+		sa.lpSecurityDescriptor = NULL;		// безопасность по умолчанию
+
+		//Создаём дескрипторы каналов
+		HANDLE hReadPipe1, hWritePipe1;
+		HANDLE hReadPipe2, hWritePipe2;
+		if (!CreatePipe(&hReadPipe1, &hWritePipe2, &sa, NULL)) {
+			cerr << "Failed to create pipe1";
+		}
+		if (!CreatePipe(&hReadPipe2, &hWritePipe2, &sa, NULL)) {
+			cerr << "Failed to create pipe2";
+		}
+		STARTUPINFO sui;
+		sui.hStdInput = stdin;
+		sui.hStdOutput = stdout;
+	}
+	return 0;
 }
-
-// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
-// Debug program: F5 or Debug > Start Debugging menu
-
-// Tips for Getting Started: 
-//   1. Use the Solution Explorer window to add/manage files
-//   2. Use the Team Explorer window to connect to source control
-//   3. Use the Output window to see build output and other messages
-//   4. Use the Error List window to view errors
-//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
-//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file
